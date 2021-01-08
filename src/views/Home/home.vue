@@ -231,7 +231,7 @@ export default {
     width: 70%;
     height: 100%;
     border: 2px solid #A5242A;
-    left: 16%;
+    left: 15%;
     top: 0;
     padding: 20px;
     padding-right: 0;

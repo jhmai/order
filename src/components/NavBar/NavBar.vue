@@ -128,6 +128,7 @@ export default {
 .logo{
     display: flex;
     align-items: center;
+    cursor: pointer;
 }
 .logo>img{
     width: 18px;
@@ -247,5 +248,8 @@ export default {
 .dropdown-menu{
     padding: 10px;
     padding-bottom: 0;
+}
+li{
+    cursor: pointer;
 }
 </style>

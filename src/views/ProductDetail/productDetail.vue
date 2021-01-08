@@ -6,7 +6,7 @@
                   <div class="detail-left col-md-6">
                     <div class="banner-box">
                         <div class="banner">
-                            <img :src="'http://m.qlzxb.cn/newapp/get_img/name/'+storeInfo.store_name">
+                            <img :src="'http://m.qlzxb.cn/newapp/get_bigimg/name/'+storeInfo.store_name">
                         </div>
                         <!-- <div class="banner-list">
                             <div class="scroll-left scroll-icon">

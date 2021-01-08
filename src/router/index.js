@@ -72,8 +72,13 @@ const router = new VueRouter({
   routes
 })
 
+const cacheArr=['home','productList']
 router.beforeEach((to, from, next) => {
-  
+  console.log(cacheArr.includes(to.name))
+  if (cacheArr.includes(to.name)) {
+      store.commit('keepAlive',to.name)
+  }
+
   if (store.getters.token) {
     if (to.name=='login') {
       next('/login')

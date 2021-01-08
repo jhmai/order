@@ -79,6 +79,15 @@ export default {
        this.paramas.sid=this.$route.params.id;
        this.paramas.keyword=this.$route.params.keyword;
        this.getProducts()
+    },
+    beforeRouteLeave (to,from,next){
+        // console.log(1)
+
+        if (to.name!='productDetail') {
+            this.$store.commit('noKeepAlive','productList')
+        }
+        next()
+
     }
 }
 </script>

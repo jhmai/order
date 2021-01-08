@@ -2,7 +2,9 @@
   <div id="app">
     <navbar v-if="isshow"></navbar>
     <searchbar v-if="isshow"></searchbar>
-    <router-view/>
+    <keep-alive :include="cached">
+        <router-view/>
+    </keep-alive>
   </div>
 </template>
 
@@ -30,6 +32,11 @@
         }
         console.log(to.name)
       }
+    },
+    computed:{
+        cached(){
+          return this.$store.state.cacheArr
+        }
     }
 
   }

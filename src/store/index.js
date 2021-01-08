@@ -7,9 +7,17 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-
+  	cacheArr: []
   },
   mutations: {
+  	keepAlive(state,component){
+      
+  		!state.cacheArr.includes(component)&&state.cacheArr.push(component)
+  	},
+  	noKeepAlive(state,component){
+  		let index = state.cacheArr.indexOf(component);
+      	index > -1 && state.cacheArr.splice(index, 1);
+  	}
   },
   actions: {
   },
