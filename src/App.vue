@@ -1,14 +1,40 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
+    <navbar v-if="isshow"></navbar>
+    <searchbar v-if="isshow"></searchbar>
     <router-view/>
   </div>
 </template>
 
-<style lang="scss">
+
+<script>
+  import navbar from './components/NavBar/NavBar'
+  import searchbar from './components/SearchBar/SearchBar'
+  export default {
+    name: 'app',
+    data(){
+      return{
+        isshow:true
+      }
+    },
+    components: {
+      navbar,
+      searchbar
+    },
+    watch:{
+      $route(to, from) {
+        if (to.name=='login') {
+          this.isshow=false
+        }else{
+          this.isshow=true
+        }
+        console.log(to.name)
+      }
+    }
+
+  }
+</script>
+<style lang="scss" scoped>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -16,17 +42,10 @@
   text-align: center;
   color: #2c3e50;
 }
+body{
+  margin: 0;
+}
+ul{
 
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
 }
 </style>
