@@ -55,7 +55,7 @@
                         <el-form ref="form" label-width="80px">
                             <span>提货地点</span>
                             <el-form-item>
-                                <el-select  placeholder="请选择提货地点" v-model="place">
+                                <el-select  placeholder="请选择提货地点" v-model="place" popper-class='select'>
                                   <el-option 
                                     v-for='item in config.warehouseAreas'
                                     :label="item.DELIVERY_WAREHOUSE" 
@@ -66,7 +66,7 @@
                             </el-form-item>
                             <span>结算方式</span>
                             <el-form-item>
-                                <el-select  placeholder="请选择结算方式" v-model="payType">
+                                <el-select  placeholder="请选择结算方式" v-model="payType" popper-class='select'>
                                   <el-option
                                     v-for='item in config.balances'
                                     :label="item.balance_type_name" 
@@ -82,7 +82,7 @@
                             <span>商品规格</span>
                             <ul class="size-list" aria-labelledby="dLabel" style="width: 100%;">
                                 <li 
-                                    v-for='(item,key,index) in productValue' 
+                                    v-for='(item,key) in productValue' 
                                     :key='item.unique' 
                                     :class="[selectedId==key?'actived':'']"
                                     @click='chooseSize(key)'
@@ -728,6 +728,12 @@ input[type="number"]{
 .main/deep/.el-form-item__content{
     margin-left: 0!important;
     margin-top: 15px;
+}
+.main/deep/.el-select .el-input.is-focus .el-input__inner{
+    border-color: #B41D28;
+}
+.select .selected{
+    color: #B41D28!important;
 }
 
 </style>

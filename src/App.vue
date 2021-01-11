@@ -2,6 +2,7 @@
   <div id="app">
     <navbar v-if="isshow"></navbar>
     <searchbar v-if="isshow"></searchbar>
+    <right-bar v-if="isshow"></right-bar>
     <keep-alive :include="cached">
         <router-view/>
     </keep-alive>
@@ -12,6 +13,7 @@
 <script>
   import navbar from './components/NavBar/NavBar'
   import searchbar from './components/SearchBar/SearchBar'
+  import rightBar from './components/rightBar'
   export default {
     name: 'app',
     data(){
@@ -21,7 +23,8 @@
     },
     components: {
       navbar,
-      searchbar
+      searchbar,
+      rightBar
     },
     watch:{
       $route(to, from) {
