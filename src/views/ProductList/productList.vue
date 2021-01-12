@@ -11,10 +11,10 @@
                <!-- <div class="product-num">125款产品</div> -->
            </div>
            <ul class="product-list">
-                <router-link tag='li' v-for='item in productList'
+                <router-link tag='li' v-for='(item,index) in productList'
                 :to='"/productDetail/"+item.id' 
                 class="product-list-item"  
-                :key='item.id'>
+                :key='index'>
                    <div class="product-img">
                        <img :src="'http://m.qlzxb.cn/newapp/get_img/name/'+item.store_name">
                        <div class="sell-num">销量{{item.sales}}</div>
@@ -69,6 +69,8 @@ export default {
             this.getProducts()
         },
         getProducts(){
+            this.paramas.sid=this.$route.query.id;
+            this.paramas.keyword=this.$route.query.keyword;
             getProducts(this.paramas).then(res=>{
                 console.log(res.data.data)
                 this.productList.push(...res.data.data)
@@ -76,9 +78,7 @@ export default {
         }
     },
     mounted(){
-       this.paramas.sid=this.$route.params.id;
-       this.paramas.keyword=this.$route.params.keyword;
-       this.getProducts()
+        this.getProducts()
     },
     beforeRouteLeave (to,from,next){
         // console.log(1)
@@ -87,8 +87,17 @@ export default {
             this.$store.commit('noKeepAlive','productList')
         }
         next()
+    },
 
-    }
+    watch: {
+	  '$route' (to, from) { //监听路由是否变化
+		  if(to.path==from.path&&to.query!= from.query){
+              this.productList=[]
+			  this.id = to.query.id;
+			  this.getProducts();//重新加载数据
+		  }
+	  }
+}
 }
 </script>
 <style lang="scss" scoped>
@@ -170,6 +179,13 @@ export default {
 .product-title{
     margin: 3px 0 8px;
     font-size: 20px;
+    text-overflow: -o-ellipsis-lastline;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical; 
 }
 .product-price{
     font-size: 15px;

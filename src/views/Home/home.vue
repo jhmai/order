@@ -14,7 +14,7 @@
             </div>
             <div class="category-box" :class="[isshow?'show':'hidden']">
                 <ul class="category-content">
-                    <router-link v-for='item in categoryList' tag='li' :to='"/productList/"+item.id'>
+                    <router-link v-for='item in categoryList' tag='li'  :to="{path:'/productList',query:{id:item.id}}" :key='item.id'>
                         <img :src="'http://m.qlzxb.cn/newapp/get_category_img/name/'+item.cate_name">
                         <span>{{item.cate_name}}</span>
                     </router-link>

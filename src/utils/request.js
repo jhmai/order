@@ -28,7 +28,7 @@ service.interceptors.request.use(config=>{
 service.interceptors.response.use(config=>{
 	// vm.$dialog.loading.close();
   // console.log(config.data.status)
-  if (config.data.status==410000) {
+  if (config.data.status==410000||config.data.status==410001) {
     localStorage.removeItem('token')
     Message.error('登录超时，请重新登录');
     setTimeout(function(){

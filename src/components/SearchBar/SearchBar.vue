@@ -9,9 +9,8 @@
         </div>
         
         <div class="search">
-            <el-input placeholder="请输入内容" v-model="input" class="input-with-select">
-                
-                <el-button slot="append">搜索</el-button>
+            <el-input placeholder="请输入内容" v-model="input" class="input-with-select">        
+                <el-button slot="append" class="search-btn" @click='search'>搜索</el-button>
             </el-input>
         </div>
         
@@ -25,6 +24,16 @@
     data(){
         return{
             input:''
+        }
+    },
+    methods:{
+        search(){
+           this.$router.push({
+               path:'/productList',
+               query:{
+                   keyword:this.input
+               }
+           })
         }
     },
     components: {

@@ -27,15 +27,15 @@ const routes = [
     }
   },
   {
-    path:'/productList/:id',
+    path:'/productList',
     name:'productList',
     component:()=>import('@/views/ProductList/productList.vue'),
     meta:{
-
+      savedPosition:100
     }
   },
   {
-    path:'/productDetail/:id',
+    path:'/productDetail/:id/',
     name:'productDetail',
     component:()=>import('@/views/ProductDetail/productDetail.vue'),
     meta:{
@@ -69,7 +69,15 @@ const routes = [
 ]
 
 const router = new VueRouter({
-  routes
+  routes,
+  scrollBehavior (to, from, savedPosition) {
+    console.log(savedPosition)
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return { x: 0, y: 0 }
+    }
+  }
 })
 
 const cacheArr=['home','productList']
@@ -81,7 +89,7 @@ router.beforeEach((to, from, next) => {
 
   if (store.getters.token) {
     if (to.name=='login') {
-      next('/login')
+      next()
     }else{
       store.dispatch('cart/getCartNum').then(next())
       const userInfo=store.getters.userInfo.uid
