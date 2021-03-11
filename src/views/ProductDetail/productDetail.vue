@@ -6,7 +6,7 @@
                   <div class="detail-left col-md-6">
                     <div class="banner-box">
                         <div class="banner">
-                            <img :src="'http://m.qlzxb.cn/newapp/get_bigimg/name/'+storeInfo.store_name">
+                            <img :src="storeInfo.image">
                         </div>
                         <!-- <div class="banner-list">
                             <div class="scroll-left scroll-icon">
@@ -92,12 +92,12 @@
                         </div>
                         <div class="number product-attr">
                             <span>请输入购买数量</span>
-                            <div class="number-box">
+                            <!-- <div class="number-box">
                                 <span class="desc-btn" @click='desc'>-</span>
                                 <input type="number" min="1" name="" v-model='addCartParam.cartNum' class="number-value">
                                 <span class="add-btn" @click='add'>+</span>
-                            </div>
-                            
+                            </div> -->
+                            <number-box @desc='desc' @add='add'></number-box>
                         </div>  
                         <div class="date product-attr">
                             <span>需求日期</span>
@@ -133,6 +133,7 @@ import { getProductDetail } from '@/api/product'
 import { getConfig,getCustomerInfo} from '@/api/member'
 import { getPrice } from '@/api/order'
 import { addCart } from '@/api/cart'
+import numberBox from '@/components/numberBox'
 export default {
     name: 'productDetail',
     data(){
@@ -186,7 +187,7 @@ export default {
         }
     },
     components: {
-      
+      numberBox
     },
     methods:{
         getProductDetail (){
@@ -208,15 +209,15 @@ export default {
                 this.getConfig()
            })
         },
-        desc(){
+        desc(val){
             if (this.productNum<=1) {
                 return
             }
-            --this.addCartParam.cartNum
+            this.addCartParam.cartNum=val
             this.getPrice()
         },
-        add(){
-            ++this.addCartParam.cartNum
+        add(val){
+            this.addCartParam.cartNum=val
             this.getPrice()
         },
         chooseSize(id){
@@ -236,8 +237,13 @@ export default {
                 p_Out_WarehouseCode:placeCode
             }).then(res=>{
                 // console.log(res.data.data.pricegroupdata)
-                this.price=res.data.data.pricegroupdata
-                this.addCartParam.priceDetails=this.price
+                if(res.data.status==200){
+                    this.price=res.data.data.pricegroupdata
+                    this.addCartParam.priceDetails=this.price
+                }else{
+                    this.$message.error(res.data.msg)
+                }
+                
             })
         },
         getConfig(){
@@ -318,7 +324,15 @@ export default {
             },
             deep:true
         }
-    }
+    },
+    beforeRouteLeave (to,from,next){
+        // console.log(1)
+        if (to.name!='productList') {
+            this.$store.commit('noKeepAlive','productList')
+            
+        }
+        next()
+    },
 }
 </script>
 <style lang="scss" scoped>
@@ -352,7 +366,7 @@ export default {
 .banner>img{
     width: 100%;
     height: auto;
-    max-height: 450px;
+    max-height: 250px;
 }
 .banner-list{
     position: relative;

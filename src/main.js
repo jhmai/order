@@ -9,7 +9,9 @@ import './assets/css/border.css';
 import axios from '@/utils/request.js'
 import qs from 'qs'
 import filters from '@/utils/filters'
+import searchbar from './components/SearchBar/SearchBar'
 
+Vue.component('searchbar',searchbar)
 Object.keys(filters).forEach(key=>{
 	Vue.filter(key,filters[key])
 })

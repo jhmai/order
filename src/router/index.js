@@ -65,6 +65,10 @@ const routes = [
     meta:{
 
     }
+  },
+  {
+    path: '*',   // 错误路由[写在最后一个]
+    redirect: '/home'   //重定向
   }
 ]
 
@@ -83,9 +87,16 @@ const router = new VueRouter({
 const cacheArr=['home','productList']
 router.beforeEach((to, from, next) => {
   console.log(cacheArr.includes(to.name))
-  if (cacheArr.includes(to.name)) {
-      store.commit('keepAlive',to.name)
+  if(from.name=='login'){
+    cacheArr.forEach(item=>{
+      store.commit('noKeepAlive',item)
+    })
+  }else{
+    if (cacheArr.includes(to.name)) {
+        store.commit('keepAlive',to.name)
+    }
   }
+ 
 
   if (store.getters.token) {
     if (to.name=='login') {

@@ -3,7 +3,7 @@ import Vue from 'vue';
 import store from '@/store'
 import router from '../router';
 import { Message } from 'element-ui';
-let baseURL=process.env.NODE_ENV=='development'?'api':'http://b2bapi.ql.com'
+let baseURL=process.env.NODE_ENV=='development'?'api':'http://b2bapi.kito.cn'
 const service = axios.create({
   timeout: 7000, // 请求超时时间
   baseURL: baseURL,
@@ -30,11 +30,12 @@ service.interceptors.response.use(config=>{
   // console.log(config.data.status)
   if (config.data.status==410000||config.data.status==410001) {
     localStorage.removeItem('token')
-    Message.error('登录超时，请重新登录');
+    
     setTimeout(function(){
       router.push({
         path:'/login'
       })
+      Message.error('登录超时，请重新登录');
     },1500)
     
 

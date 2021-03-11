@@ -1,11 +1,15 @@
 <template>
     <div class="home">
+        <searchbar></searchbar>
         <div class="main row" @mouseleave='hideCategory()'>
             <div class="category">
                 <div class="line"></div>
                 <ul class="category-list list-group">
                     <li class="list-group-item category-item" 
-                     v-for="item in category" :key='item.id' @mouseover='showCategory(item.id)'>
+                     v-for="item in category" 
+                     :key='item.id'
+                      @mouseover='showCategory(item.id)' 
+                      :class="[item.id==overId?'category-item-actice':'']">
                         <span>{{item.cate_name}}</span>
                         <i class="el-icon-arrow-right"></i>
                     </li>
@@ -14,9 +18,9 @@
             </div>
             <div class="category-box" :class="[isshow?'show':'hidden']">
                 <ul class="category-content">
-                    <router-link v-for='item in categoryList' tag='li'  :to="{path:'/productList',query:{id:item.id}}" :key='item.id'>
-                        <img :src="'http://m.qlzxb.cn/newapp/get_category_img/name/'+item.cate_name">
-                        <span>{{item.cate_name}}</span>
+                    <router-link v-for='item in categoryList' tag='li'  :to='"/productDetail/"+item.id' :key='item.id'>
+                        <img :src="item.image">
+                        <span>{{item.store_name}}</span>
                     </router-link>
                 </ul>
             </div>
@@ -79,13 +83,15 @@
 
 <script>
 import { getCategory } from '@/api/product'
+
 export default {
     name: 'home',
     data(){
         return{
             isshow:false,
             category:[],
-            categoryList:[]
+            categoryList:[],
+            overId:''
         }
     },
     components: {
@@ -95,13 +101,15 @@ export default {
         showCategory(id){
             this.isshow=true
             // console.log(id)
+            this.overId=id;
             let index=this.category.findIndex(item=>{
                 return item.id==id
             })
-            this.categoryList=this.category[index].children
+            this.categoryList=this.category[index].childrenByOneLevel
         },
         hideCategory(){
             this.isshow=false
+            this.overId=''
         }
     },
     mounted(){

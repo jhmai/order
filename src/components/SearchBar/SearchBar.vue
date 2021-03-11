@@ -2,16 +2,19 @@
     <div class="search-bar">
         
         <div class="logo">
-            <img src="@/assets/images/logo.png">
+            <img src="@assets/images/logo.png">
         </div>
         <div class='center'>
             <slot name="center"></slot>
         </div>
         
         <div class="search">
-            <el-input placeholder="请输入内容" v-model="input" class="input-with-select">        
+            <el-input placeholder="请输入内容" v-model="keyword" class="input-with-select">        
                 <el-button slot="append" class="search-btn" @click='search'>搜索</el-button>
             </el-input>
+        </div>
+        <div class='right'>
+            <slot name="right"></slot>
         </div>
         
     </div>
@@ -31,9 +34,15 @@
            this.$router.push({
                path:'/productList',
                query:{
-                   keyword:this.input
+                   keyword:this.keyword
                }
            })
+        }
+    },
+    props:{
+        keyword:{
+            type:String,
+            default:''
         }
     },
     components: {
@@ -46,7 +55,7 @@
     width: 100%;
     display: flex;
     align-items: center;
-    padding: 0 15%;
+    // padding: 0 15%;
     margin: 25px 0;
 }
 .center{

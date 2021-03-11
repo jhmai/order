@@ -1,7 +1,9 @@
 <template>
     <div class="productList">
+        
         <div class="main row">
-           <div class="sort">
+            <searchbar :keyword='paramas.keyword'></searchbar>
+            <div class="sort">
                <div class="sort-list">
                    <div>综合</div>
                    <div>新品</div>
@@ -9,7 +11,7 @@
                    <div>价格</div>
                </div>
                <!-- <div class="product-num">125款产品</div> -->
-           </div>
+            </div>
            <ul class="product-list">
                 <router-link tag='li' v-for='(item,index) in productList'
                 :to='"/productDetail/"+item.id' 
@@ -82,9 +84,9 @@ export default {
     },
     beforeRouteLeave (to,from,next){
         // console.log(1)
-
         if (to.name!='productDetail') {
             this.$store.commit('noKeepAlive','productList')
+            
         }
         next()
     },

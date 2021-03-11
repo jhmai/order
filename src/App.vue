@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <navbar v-if="isshow"></navbar>
-    <searchbar v-if="isshow"></searchbar>
+    <!-- <searchbar v-if="isshow"></searchbar> -->
     <right-bar v-if="isshow"></right-bar>
     <keep-alive :include="cached">
         <router-view/>

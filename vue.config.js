@@ -21,7 +21,7 @@ module.exports = {
     //代理
     proxy: {
       '/api': {
-        target:'http://b2bapi.ql.com',
+        target:'http://b2bapi.kito.cn',
         changeOrigin: true,
         ws:true,
         //重写路径  需要设置重写的话，要在后面的调用接口前加上/api 来代替target
