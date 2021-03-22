@@ -257,7 +257,7 @@ export default {
         },
         getCustomerInfo(){
             getCustomerInfo().then(res=>{
-                this.addCartParam.customerInfo=res.data.data
+                this.addCartParam.attrPersonConfig.customerInfo=res.data.data
             })
         },
         addCart(){
@@ -285,8 +285,9 @@ export default {
     },
     watch:{
         config(curval,oldval){
-            this.addCartParam.columns=curval.balances
-            this.addCartParam.warehouseList=curval.warehouseAreas
+            console.log(curval.balances)
+            this.addCartParam.attrPersonConfig.columns=curval.balances
+            this.addCartParam.attrPersonConfig.warehouseList=curval.warehouseAreas
             console.log(curval.config_json.balancetypevalue)
             let value={
                 'keyid':curval.config_json.balancetypevalue,
@@ -300,7 +301,7 @@ export default {
                 return item.warehouse_id==curval
             })[0]
             let warehouse=area;
-            this.addCartParam.warehouse=warehouse
+            this.addCartParam.attrPersonConfig.warehouse=warehouse
             this.pcAttrSelect.warehouseid=area.warehouse_id;
             this.pcAttrSelect.warehousecode=area.warehouse_code;
             this.pcAttrSelect.warehousevalue=area.DELIVERY_WAREHOUSE;

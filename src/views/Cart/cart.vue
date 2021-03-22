@@ -4,6 +4,7 @@
             <el-table
                 ref="multipleTable"
                 :data="cartList"
+                row-key="1"
                 tooltip-effect="dark"
                 style="width: 100%"
                 @selection-change="handleSelectionChange">
@@ -11,8 +12,16 @@
                   type="selection"
                   width="85">
                 </el-table-column>
-                <el-table-column
+                 <el-table-column v-for="(item, index) in col"
+                        :key="`col_${index}`"
+                        :prop="dropCol[index].prop"
+                        :label="item.label"
+                        class-name="allowDrag"
+                        > 
+                </el-table-column>
+                <!-- <el-table-column
                   label="商品名称"
+                  prop='productInfo.store_name'
                   width="400"
                   >
                     <template slot-scope="scope">
@@ -27,17 +36,22 @@
                 </el-table-column>
                 <el-table-column
                   label="单价"
+                  prop="truePrice"
                   >
                   <template slot-scope="scope">
                     <div class="single-price"> {{scope.row.truePrice|toFixed}}元</div>
                    
                   </template>
-                </el-table-column>
+                </el-table-column> -->
+
+
+
                 <el-table-column
-                  prop="address"
+                  prop="number"
                   label="数量"
                   show-overflow-tooltip
                   width="190"
+                  class-name='ignore-elements'
                   >
                    <template slot-scope="scope">
                     <div class="number-box">
@@ -52,9 +66,10 @@
                   </template>
                 </el-table-column>
                 <el-table-column
-                  prop="address"
+                  prop="allprice"
                   label="小计"
                   width="120"
+                  class-name='ignore-elements'
                   show-overflow-tooltip>
                   <template slot-scope="scope">
                     <div class="total-price"> {{scope.row.truePrice*scope.row.cart_num|toFixed}}元</div>
@@ -62,8 +77,9 @@
                 </el-table-column>
 
                 <el-table-column
-                  prop="address"
+                  prop="option"
                   label="操作"
+                  class-name='ignore-elements'
                   show-overflow-tooltip>
                   <template slot-scope="scope">
                     <div class="delete" @click='handelDelete(scope.row.id)'> 删除</div>
@@ -92,16 +108,479 @@
 
 <script>
 import {getCartList,deleteCart} from '@/api/cart'
+import Sortable from 'sortablejs'
 export default {
     name: 'cart',
     data(){
         return{
             cartList:[],
             selectedArr:[],
-            orderPrice:0
+            orderPrice:0,
+            col : [
+                    {prop: "productInfo.store_name", label: "商品名称"},
+                    {prop: "truePrice", label: "单价"},
+                   
+                ],
+                dropCol : [
+                    {prop: "productInfo.store_name", label: "商品名称"},
+                    {prop: "truePrice", label: "单价"},
+                ],
+            "valid": [
+            {
+                "id": 12,
+                "type": "product",
+                "product_id": 125,
+                "product_attr_unique": "f2c91c3f",
+                "cart_num": 10,
+                "tetant_id": 2,
+                "cart_type": 1,
+                "relation_sys_id": null,
+                "relation_sys_desc": null,
+                "price_details": {
+                    "base_price": {
+                        "price_per_piece": 7.86, 
+                        "price_per_piece_unit": "片",
+                        "price_per_package": 7.86,
+                        "price_per_package_unit": "(1)箱",
+                        "price_per_quaremetre": 131,
+                        "price_per_quaremetre_unit": "",
+                        "is_show": true
+                    },
+                    "policy_price": {
+                        "price_per_piece": 4.716,
+                        "price_per_piece_unit": "片",
+                        "price_per_package": 4.716,
+                        "price_per_package_unit": "(1)箱",
+                        "price_per_quaremetre": 78.6,
+                        "price_per_quaremetre_unit": "",
+                        "is_show": true
+                    },
+                    "preferential_price": {
+                        "price_per_piece": 0,
+                        "price_per_piece_unit": "片",
+                        "price_per_package": 0,
+                        "price_per_package_unit": "(1)箱",
+                        "price_per_quaremetre": 0,
+                        "price_per_quaremetre_unit": "",
+                        "is_show": true
+                    },
+                    "contract_price": {
+                        "price_per_piece": 0,
+                        "price_per_piece_unit": "片",
+                        "price_per_package": 0,
+                        "price_per_package_unit": "(1)箱",
+                        "price_per_quaremetre": 0,
+                        "price_per_quaremetre_unit": "",
+                        "is_show": true
+                    },
+                    "apply_price": {
+                        "price_per_piece": 0,
+                        "price_per_piece_unit": "",
+                        "price_per_package": 0,
+                        "price_per_package_unit": "",
+                        "price_per_quaremetre": 0,
+                        "price_per_quaremetre_unit": "",
+                        "is_show": true
+                    },
+                    "approve_price": {
+                        "price_per_piece": 0,
+                        "price_per_piece_unit": "片",
+                        "price_per_package": 0,
+                        "price_per_package_unit": "(1)箱",
+                        "price_per_quaremetre": 0,
+                        "price_per_quaremetre_unit": "",
+                        "is_show": true
+                    },
+                    "balance_price": {
+                        "price_per_piece": 4.716,
+                        "price_per_piece_unit": "片",
+                        "price_per_package": 4.716,
+                        "price_per_package_unit": "(1)箱",
+                        "price_per_quaremetre": 78.6,
+                        "price_per_quaremetre_unit": "",
+                        "is_show": true
+                    },
+                    "outwarehouse_price": {
+                        "price_per_piece": 5.046,
+                        "price_per_piece_unit": "片",
+                        "price_per_package": 5.046,
+                        "price_per_package_unit": "(1)箱",
+                        "price_per_quaremetre": 84.1,
+                        "price_per_quaremetre_unit": "",
+                        "is_show": true
+                    },
+                    "project_price": {
+                        "price_per_piece": 4.716,
+                        "price_per_piece_unit": "片",
+                        "price_per_package": 4.716,
+                        "price_per_package_unit": "(1)箱",
+                        "price_per_quaremetre": 78.6,
+                        "price_per_quaremetre_unit": "",
+                        "is_show": true
+                    },
+                    "balance_finish_price": {
+                        "price_per_piece": 5.046,
+                        "price_per_piece_unit": "片",
+                        "price_per_package": 5.046,
+                        "price_per_package_unit": "(1)箱",
+                        "price_per_quaremetre": 84.1,
+                        "price_per_quaremetre_unit": "",
+                        "is_show": true
+                    },
+                    "assistantuomprm": 1,
+                    "uomarea": 0.06,
+                    "prdgag": 10,
+                    "uomweight": 1.33,
+                    "spec_price": 0,
+                    "specyn": 0,
+                    "spec_way": "N"
+                },
+                "generate_info_flag": 0,
+                "customer_id": 40726,
+                "productInfo": {
+                    "id": 125,
+                    "image": "http://abc.ql.com/uploads/test/2/attach/20200408/44/44592d298e31d5e03ce7b83453c862cd.jpg",
+                    "sales": 0,
+                    "store_name": "柏林顿",
+                    "tetant_id": "2",
+                    "attrInfo": {
+                        "product_id": 125,
+                        "suk": "K00613736TJX,优等,(1)箱",
+                        "image": "http://abc.ql.com/uploads/test/2/attach/20200408/44/44592d298e31d5e03ce7b83453c862cd.jpg",
+                        "unique": "f2c91c3f",
+                        "bar_code": "K00613736TJX",
+                        "tetant_id": "2",
+                        "id": 16411,
+                        "ot_price": "7.86",
+                        "width": 100,
+                        "length": 600,
+                        "huansuanbili": 1
+                    }
+                },
+                "truePrice": 5.146,
+                "lineno": 1,
+                "item_id": "110362",
+                "base_level_id": "1",
+                "assistant_uom_id": "52"
+            },
+            {
+                "id": 13,
+                "type": "product",
+                "product_id": 125,
+                "product_attr_unique": "f2c91c3f",
+                "cart_num": 14,
+                "tetant_id": 2,
+                "cart_type": 1,
+                "relation_sys_id": null,
+                "relation_sys_desc": null,
+                "price_details": {
+                    "base_price": {
+                        "price_per_piece": 7.86,
+                        "price_per_piece_unit": "片",
+                        "price_per_package": 7.86,
+                        "price_per_package_unit": "(1)箱",
+                        "price_per_quaremetre": 131,
+                        "price_per_quaremetre_unit": "",
+                        "is_show": true
+                    },
+                    "policy_price": {
+                        "price_per_piece": 4.716,
+                        "price_per_piece_unit": "片",
+                        "price_per_package": 4.716,
+                        "price_per_package_unit": "(1)箱",
+                        "price_per_quaremetre": 78.6,
+                        "price_per_quaremetre_unit": "",
+                        "is_show": true
+                    },
+                    "preferential_price": {
+                        "price_per_piece": 0,
+                        "price_per_piece_unit": "片",
+                        "price_per_package": 0,
+                        "price_per_package_unit": "(1)箱",
+                        "price_per_quaremetre": 0,
+                        "price_per_quaremetre_unit": "",
+                        "is_show": true
+                    },
+                    "contract_price": {
+                        "price_per_piece": 0,
+                        "price_per_piece_unit": "片",
+                        "price_per_package": 0,
+                        "price_per_package_unit": "(1)箱",
+                        "price_per_quaremetre": 0,
+                        "price_per_quaremetre_unit": "",
+                        "is_show": true
+                    },
+                    "apply_price": {
+                        "price_per_piece": 0,
+                        "price_per_piece_unit": "",
+                        "price_per_package": 0,
+                        "price_per_package_unit": "",
+                        "price_per_quaremetre": 0,
+                        "price_per_quaremetre_unit": "",
+                        "is_show": true
+                    },
+                    "approve_price": {
+                        "price_per_piece": 0,
+                        "price_per_piece_unit": "片",
+                        "price_per_package": 0,
+                        "price_per_package_unit": "(1)箱",
+                        "price_per_quaremetre": 0,
+                        "price_per_quaremetre_unit": "",
+                        "is_show": true
+                    },
+                    "balance_price": {
+                        "price_per_piece": 4.716,
+                        "price_per_piece_unit": "片",
+                        "price_per_package": 4.716,
+                        "price_per_package_unit": "(1)箱",
+                        "price_per_quaremetre": 78.6,
+                        "price_per_quaremetre_unit": "",
+                        "is_show": true
+                    },
+                    "outwarehouse_price": {
+                        "price_per_piece": 5.046,
+                        "price_per_piece_unit": "片",
+                        "price_per_package": 5.046,
+                        "price_per_package_unit": "(1)箱",
+                        "price_per_quaremetre": 84.1,
+                        "price_per_quaremetre_unit": "",
+                        "is_show": true
+                    },
+                    "project_price": {
+                        "price_per_piece": 4.716,
+                        "price_per_piece_unit": "片",
+                        "price_per_package": 4.716,
+                        "price_per_package_unit": "(1)箱",
+                        "price_per_quaremetre": 78.6,
+                        "price_per_quaremetre_unit": "",
+                        "is_show": true
+                    },
+                    "balance_finish_price": {
+                        "price_per_piece": 5.046,
+                        "price_per_piece_unit": "片",
+                        "price_per_package": 5.046,
+                        "price_per_package_unit": "(1)箱",
+                        "price_per_quaremetre": 84.1,
+                        "price_per_quaremetre_unit": "",
+                        "is_show": true
+                    },
+                    "assistantuomprm": 1,
+                    "uomarea": 0.06,
+                    "prdgag": 10,
+                    "uomweight": 1.33,
+                    "spec_price": 0,
+                    "specyn": 0,
+                    "spec_way": "N"
+                },
+                "generate_info_flag": 0,
+                "customer_id": 40726,
+                "productInfo": {
+                    "id": 125,
+                    "image": "http://abc.ql.com/uploads/test/2/attach/20200408/44/44592d298e31d5e03ce7b83453c862cd.jpg",
+                    "sales": 0,
+                    "store_name": "柏林顿",
+                    "tetant_id": "2",
+                    "attrInfo": {
+                        "product_id": 125,
+                        "suk": "K00613736TJX,优等,(1)箱",
+                        "image": "http://abc.ql.com/uploads/test/2/attach/20200408/44/44592d298e31d5e03ce7b83453c862cd.jpg",
+                        "unique": "f2c91c3f",
+                        "bar_code": "K00613736TJX",
+                        "tetant_id": "2",
+                        "id": 16411,
+                        "ot_price": "7.86",
+                        "width": 100,
+                        "length": 600,
+                        "huansuanbili": 1
+                    }
+                },
+                "truePrice": 5.246,
+                "lineno": 1,
+                "item_id": "110362",
+                "base_level_id": "1",
+                "assistant_uom_id": "52"
+            },
+            {
+                "id": 14,
+                "type": "product",
+                "product_id": 125,
+                "product_attr_unique": "f2c91c3f",
+                "cart_num": 16,
+                "tetant_id": 2,
+                "cart_type": 1,
+                "relation_sys_id": null,
+                "relation_sys_desc": null,
+                "price_details": {
+                    "base_price": {
+                        "price_per_piece": 7.86,
+                        "price_per_piece_unit": "片",
+                        "price_per_package": 7.86,
+                        "price_per_package_unit": "(1)箱",
+                        "price_per_quaremetre": 131,
+                        "price_per_quaremetre_unit": "",
+                        "is_show": true
+                    },
+                    "policy_price": {
+                        "price_per_piece": 4.716,
+                        "price_per_piece_unit": "片",
+                        "price_per_package": 4.716,
+                        "price_per_package_unit": "(1)箱",
+                        "price_per_quaremetre": 78.6,
+                        "price_per_quaremetre_unit": "",
+                        "is_show": true
+                    },
+                    "preferential_price": {
+                        "price_per_piece": 0,
+                        "price_per_piece_unit": "片",
+                        "price_per_package": 0,
+                        "price_per_package_unit": "(1)箱",
+                        "price_per_quaremetre": 0,
+                        "price_per_quaremetre_unit": "",
+                        "is_show": true
+                    },
+                    "contract_price": {
+                        "price_per_piece": 0,
+                        "price_per_piece_unit": "片",
+                        "price_per_package": 0,
+                        "price_per_package_unit": "(1)箱",
+                        "price_per_quaremetre": 0,
+                        "price_per_quaremetre_unit": "",
+                        "is_show": true
+                    },
+                    "apply_price": {
+                        "price_per_piece": 0,
+                        "price_per_piece_unit": "",
+                        "price_per_package": 0,
+                        "price_per_package_unit": "",
+                        "price_per_quaremetre": 0,
+                        "price_per_quaremetre_unit": "",
+                        "is_show": true
+                    },
+                    "approve_price": {
+                        "price_per_piece": 0,
+                        "price_per_piece_unit": "片",
+                        "price_per_package": 0,
+                        "price_per_package_unit": "(1)箱",
+                        "price_per_quaremetre": 0,
+                        "price_per_quaremetre_unit": "",
+                        "is_show": true
+                    },
+                    "balance_price": {
+                        "price_per_piece": 4.716,
+                        "price_per_piece_unit": "片",
+                        "price_per_package": 4.716,
+                        "price_per_package_unit": "(1)箱",
+                        "price_per_quaremetre": 78.6,
+                        "price_per_quaremetre_unit": "",
+                        "is_show": true
+                    },
+                    "outwarehouse_price": {
+                        "price_per_piece": 5.046,
+                        "price_per_piece_unit": "片",
+                        "price_per_package": 5.046,
+                        "price_per_package_unit": "(1)箱",
+                        "price_per_quaremetre": 84.1,
+                        "price_per_quaremetre_unit": "",
+                        "is_show": true
+                    },
+                    "project_price": {
+                        "price_per_piece": 4.716,
+                        "price_per_piece_unit": "片",
+                        "price_per_package": 4.716,
+                        "price_per_package_unit": "(1)箱",
+                        "price_per_quaremetre": 78.6,
+                        "price_per_quaremetre_unit": "",
+                        "is_show": true
+                    },
+                    "balance_finish_price": {
+                        "price_per_piece": 5.046,
+                        "price_per_piece_unit": "片",
+                        "price_per_package": 5.046,
+                        "price_per_package_unit": "(1)箱",
+                        "price_per_quaremetre": 84.1,
+                        "price_per_quaremetre_unit": "",
+                        "is_show": true
+                    },
+                    "assistantuomprm": 1,
+                    "uomarea": 0.06,
+                    "prdgag": 10,
+                    "uomweight": 1.33,
+                    "spec_price": 0,
+                    "specyn": 0,
+                    "spec_way": "N"
+                },
+                "generate_info_flag": 0,
+                "customer_id": 40726,
+                "productInfo": {
+                    "id": 125,
+                    "image": "http://abc.ql.com/uploads/test/2/attach/20200408/44/44592d298e31d5e03ce7b83453c862cd.jpg",
+                    "sales": 0,
+                    "store_name": "柏林顿",
+                    "tetant_id": "2",
+                    "attrInfo": {
+                        "product_id": 125,
+                        "suk": "K00613736TJX,优等,(1)箱",
+                        "image": "http://abc.ql.com/uploads/test/2/attach/20200408/44/44592d298e31d5e03ce7b83453c862cd.jpg",
+                        "unique": "f2c91c3f",
+                        "bar_code": "K00613736TJX",
+                        "tetant_id": "2",
+                        "id": 16411,
+                        "ot_price": "7.86",
+                        "width": 100,
+                        "length": 600,
+                        "huansuanbili": 1
+                    }
+                },
+                "truePrice": 5.346,
+                "lineno": 1,
+                "item_id": "110362",
+                "base_level_id": "1",
+                "assistant_uom_id": "52"
+            }
+        ],
         }
     },
     methods:{
+        rowDrop() {
+      const tbody = document.querySelector('.el-table__body-wrapper tbody')
+      const _this = this
+      Sortable.create(tbody, {
+        onEnd({ newIndex, oldIndex }) {
+            // const currRow = _this.cartList.splice(oldIndex, 1)[0]
+            // _this.cartList.splice(newIndex, 0, currRow)
+            // console.log(_this.cartList[oldIndex])
+            // const oldItem = _this.cartList[oldIndex]
+            // const newItem= _this.cartList[newIndex]
+            
+            // _this.$set(_this.cartList,oldIndex,newItem)
+            // _this.$set(_this.cartList,newIndex,oldItem)
+        }
+      })
+    },
+    //列拖拽
+    columnDrop() {
+      const wrapperTr = document.querySelector('.el-table__header-wrapper tr')
+              this.sortable = Sortable.create(wrapperTr, {
+                handle:'.allowDrag',
+                animation: 180,
+                filter: ".ignore-elements",
+                preventOnFilter: true,
+                delay: 0,
+                onEnd: evt => {
+                    // console.log(evt.to)
+                    if(evt.newIndex>this.col.length){
+                        
+                        // console.log(evt.newIndex>this.col.length)
+                        return
+                    }
+                    const oldItem = this.dropCol[evt.oldIndex-1]
+                    const newItem= this.dropCol[evt.newIndex-1]
+                    this.$set(this.dropCol,evt.oldIndex-1,newItem)
+                    this.$set(this.dropCol,evt.newIndex-1,oldItem)
+                    
+                }
+              })
+    },
         toggleSelection(rows) {
             if (rows) {
               rows.forEach(row => {
@@ -119,7 +598,8 @@ export default {
         },
         getCartList(){
             getCartList().then(res=>{
-                this.cartList=res.data.data.valid
+                // this.cartList=res.data.data.valid
+                this.cartList=this.valid
             })
         },
         handelDelete(cartId){
@@ -220,6 +700,8 @@ export default {
     },
     mounted(){
         this.getCartList()
+        this.rowDrop()
+    this.columnDrop()
     }
 }
 </script>

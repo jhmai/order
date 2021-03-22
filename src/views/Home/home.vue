@@ -67,12 +67,12 @@
                 <ul class="product-list">
                     <li>
                         <img src="@assets/images/K01578074DAR.png">
-                        <span class="product-name">xxx</span>
+                        <span class="product-name">大理石</span>
                     </li>
-                    <li>
+                    <!-- <li>
                         <img src="@assets/images/K01578074DAR.png">
                         <span class="product-name">xxx</span>
-                    </li>
+                    </li> -->
 
                 </ul>
             </div>
